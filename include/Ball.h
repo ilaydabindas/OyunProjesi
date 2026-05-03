@@ -12,6 +12,9 @@ class Ball
         void update(); //hareket etmesini sağlar. 
         void draw(sf::RenderWindow& window); // topu ekrana çizer
 
+        // topun konumunu ayarlamak için, çarpışma sonucu oluşabilecek sorunları gidermek için kullanacağız. 
+        void setPosition(float x, float y);
+
         // duvarlara çarpınca sekmesi için yardımcı fonksiyonlar. 
         void bounceSides(); // x yönü (sol-sağ)
         void bounceTop(); //y yönü (üst)

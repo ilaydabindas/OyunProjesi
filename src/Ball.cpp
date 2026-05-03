@@ -48,3 +48,9 @@ sf::Vector2f Ball::getPosition()
 {
     return shape.getPosition();
 }
+
+// topu istenen konuma taşır. 
+void Ball::setPosition(float x, float y)
+{
+    shape.setPosition(sf::Vector2f(x,y));
+}
