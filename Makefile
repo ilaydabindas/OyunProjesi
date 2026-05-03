@@ -4,7 +4,7 @@ LDFLAGS = -L/opt/homebrew/opt/sfml/lib
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
 TARGET = oyun
-SRC = src/main.cpp src/Paddle.cpp src/Ball.cpp src/Brick.cpp
+SRC = src/main.cpp src/Paddle.cpp src/Ball.cpp src/Brick.cpp src/LevelManager.cpp
 
 all:
 	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET) $(LDFLAGS) $(LIBS)

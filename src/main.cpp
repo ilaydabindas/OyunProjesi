@@ -1,6 +1,10 @@
 #include <SFML/Graphics.hpp> // kütüphane eklendi. 
+#include <vector>
 #include "Paddle.h"
 #include "Ball.h"
+#include "Brick.h"
+#include "LevelManager.h"
+
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({800, 600}), "Arkanoid"); // "Arkanoid" başlıklı pencere oluşturur. 
@@ -8,6 +12,9 @@ int main()
     Paddle paddle(340.f,550.f); // paddle oluşturur.
 
     Ball ball(400.f,300.f); //top oluşturur. 
+
+    LevelManager levelManager; // level okuyucuyu oluşturur. 
+    std::vector<Brick> bricks = levelManager.loadLevel("levels/level1.txt"); //dosyadan blokları okur. 
 
     while (window.isOpen())
     {
@@ -29,7 +36,33 @@ int main()
             ball.reverseY(); // topun yönünü yukarı çevirir. 
         }
 
+        // tüm blokları tek tek kontrol et.
+        for(auto& brick : bricks)
+        {
+            // eğer blok kırılmamışsa.
+            if(!brick.isDestroyed())
+            {
+                sf::FloatRect bounds = brick.getBounds(); // bloğun sınırlarını al. 
+
+                if (ball.getPosition().x < bounds.position.x + bounds.size.x &&
+                    ball.getPosition().x + 20.f > bounds.position.x &&
+                    ball.getPosition().y < bounds.position.y + bounds.size.y &&
+                    ball.getPosition().y + 20.f > bounds.position.y)
+                {
+                    brick.hit(); // blok vurulur.  (canı azalır veya kırılır)
+                    ball.reverseY(); // topu ters yöne sektir. 
+                    break; // aynı anda iki bloğa birden çarpıp mantık hatası yaratmasını engellemek için döngüyü bitir. 
+                }
+            }
+        }
+
         window.clear(); // her karede ekranı sıfırlar. 
+
+        // listedeki tüm bloklara teker teker bakar. 
+        for (auto& brick : bricks)
+        {
+            brick.draw(window); // var olan blokları çizer. 
+        }
 
         paddle.draw(window); // paddle ekrana çizilir. 
         ball.draw(window); // top ekrana çizilir. 
