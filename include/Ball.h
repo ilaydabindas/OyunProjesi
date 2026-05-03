@@ -6,7 +6,7 @@ class Ball
     private:
         sf::CircleShape shape; // daire şeklinde top oluşturur. 
         sf::Vector2f velocity; //hız
-    
+        bool active {false}; // topun aktif hareket durumu. başlangıçta hareket etmez.
     public:
         Ball(float startX, float startY);
         void update(); //hareket etmesini sağlar. 
@@ -24,4 +24,8 @@ class Ball
         void reverseY();
 
         sf::Vector2f getPosition(); // topun mevcut pozisyonu. 
+
+        bool getActive() const; // topun aktif olup olmadığını döndürür.
+        void launch(); // topu fırlatarak harekete geçirir.
+        void reset(); //topu hareketsiz duruma getirir. paddle ortasına bağlar. 
 };

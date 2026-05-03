@@ -10,6 +10,12 @@ Ball::Ball(float startX, float startY)
 
 void Ball::update() // topun hareketi burada gerçekleşir.
 {
+    // top aktif değilse hareketi ve çarpışmaları iptal et. 
+    if (!active)
+    {
+        return;
+    }
+
     shape.move(velocity); //topu hareket ettirir. 
 
     // sol-sağ duvar çarpışması. 
@@ -53,4 +59,27 @@ sf::Vector2f Ball::getPosition()
 void Ball::setPosition(float x, float y)
 {
     shape.setPosition(sf::Vector2f(x,y));
+}
+
+// topun durumunu oku.
+bool Ball::getActive() const
+{
+    return active;
+}
+
+// topu harekete geçirir. 
+void Ball::launch()
+{
+    active = true;
+    // top aşağı düştükten sonra hemen paddle'a çarpmasın diye yönünü yukarı çeviririz.
+    if (velocity.y > 0)
+    {
+        velocity.y = -velocity.y;
+    } 
+}
+
+// topu pasife alır, düştüğünde kullanacağız. 
+void Ball::reset()
+{
+    active = false;
 }
