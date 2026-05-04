@@ -4,6 +4,8 @@
 #include "Ball.h"
 #include "Brick.h"
 #include "LevelManager.h"
+#include <string> // skor yazdırmak için
+#include <iostream> // hata mesajı için
 
 int main()
 {
@@ -15,6 +17,22 @@ int main()
 
     LevelManager levelManager; // level okuyucuyu oluşturur. 
     std::vector<Brick> bricks = levelManager.loadLevel("levels/level1.txt"); //dosyadan blokları okur. 
+
+    int score = 0;
+
+    sf::Font font;
+    
+    if (!font.openFromFile("assets/8-bit-hud.ttf")) 
+    {
+        std::cout << "Font dosyasi bulunamadi!" << std::endl;
+    }
+    sf::Text scoreText(font);
+    scoreText.setFont(font); // yazı tipi
+    scoreText.setCharacterSize(20); // yazı boyutu
+    scoreText.setFillColor(sf::Color::White); // Yazı rengi
+    scoreText.setPosition({10.f, 10.f}); // ekranın sol üst köşesi
+    scoreText.setString("Skor: 0"); // başlangıç yazısı
+
 
     while (window.isOpen())
     {
@@ -71,7 +89,12 @@ int main()
                     ball.getPosition().y < bounds.position.y + bounds.size.y &&
                     ball.getPosition().y + 20.f > bounds.position.y)
                     {
-                        brick.hit(); // blok vurulur.  (canı azalır veya kırılır)
+                        int kazanilanPuan = brick.hit(); // blok vurulur.  (canı azalır veya kırılır)
+                        if (kazanilanPuan > 0)
+                        {
+                            score += kazanilanPuan; // skoru güncelle. 
+                            scoreText.setString("Skor: "+ std::to_string(score)); // ekrandaki yazıyı güncelle. 
+                        }
                         ball.reverseY(); // topu ters yöne sektir. 
                         break; // aynı anda iki bloğa birden çarpıp mantık hatası yaratmasını engellemek için döngüyü bitir. 
                     }
@@ -95,6 +118,7 @@ int main()
 
         paddle.draw(window); // paddle ekrana çizilir. 
         ball.draw(window); // top ekrana çizilir. 
+        window.draw(scoreText); // skor ekrana çizilir. 
 
         window.display(); // ekrana çizilenleri gösterir. 
     }
